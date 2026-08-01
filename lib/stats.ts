@@ -74,9 +74,15 @@ export function summarizeByCar(
     const paid = carReservations
       .filter((r) => r.payment_status === 'paid')
       .reduce((sum, r) => sum + Number(r.total_price), 0);
-    const carExpenses = expenses
+    // Same reasoning as carRunningTotals: give this car its share of any
+    // company-wide expense so per-car and overall totals reconcile.
+    const carSpecificExpenses = expenses
       .filter((e) => e.car_id === car.id)
       .reduce((sum, e) => sum + Number(e.amount), 0);
+    const sharedExpenses = expenses
+      .filter((e) => e.car_id === null)
+      .reduce((sum, e) => sum + Number(e.amount) / Math.max(1, cars.length), 0);
+    const carExpenses = carSpecificExpenses + sharedExpenses;
 
     return {
       carId: car.id,
@@ -115,7 +121,18 @@ export function carRunningTotals(
 
   return cars.map((car) => {
     const carReservations = reservations.filter((r) => r.car_id === car.id);
-    const carExpenses = expenses.filter((e) => e.car_id === car.id);
+    // Expenses tied specifically to this car, plus an even share of any
+    // company-wide expenses (car_id null) — otherwise a shared cost like
+    // a phone bill or a general supply run would vanish from every car's
+    // individual running total while still dragging down the combined
+    // "Profit by month" chart, making the two views impossible to
+    // reconcile.
+    const carSpecificExpenses = expenses.filter((e) => e.car_id === car.id);
+    const sharedExpenses = expenses.filter((e) => e.car_id === null);
+    const carExpenses = [
+      ...carSpecificExpenses,
+      ...sharedExpenses.map((e) => ({ ...e, amount: Number(e.amount) / Math.max(1, cars.length) })),
+    ];
 
     const revenueByMonth = new Map<string, number>();
     for (const r of carReservations) {

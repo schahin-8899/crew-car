@@ -26,13 +26,15 @@ export default async function AdminDashboardPage() {
     .reduce((sum, r) => sum + Number(r.total_price), 0);
   const totalOutstanding = totalBilled - totalPaid;
   const totalExpenses = expenseList.reduce((sum, e) => sum + Number(e.amount), 0);
-  const netProfit = totalPaid - totalExpenses;
 
   const carSummaries = summarizeByCar(carList, reservationList, expenseList);
   const monthly = monthlyFinancials(reservationList, expenseList);
   const runningTotals = carRunningTotals(carList, reservationList, expenseList);
   const maxRevenue = Math.max(1, ...monthly.map((m) => m.revenue));
   const maxProfitMagnitude = Math.max(1, ...monthly.map((m) => Math.abs(m.profit)));
+  // The monthly array runs oldest → newest and always ends on the
+  // current month, so the last entry is this month's figures.
+  const thisMonthProfit = monthly[monthly.length - 1]?.profit ?? 0;
 
   return (
     <div className="max-w-4xl">
@@ -44,7 +46,7 @@ export default async function AdminDashboardPage() {
         <StatCard label="Outstanding" value={`$${totalOutstanding.toFixed(2)}`} />
         <StatCard label="Total billed" value={`$${totalBilled.toFixed(2)}`} />
         <StatCard label="Total expenses" value={`$${totalExpenses.toFixed(2)}`} />
-        <StatCard label="Net profit" value={`$${netProfit.toFixed(2)}`} highlight />
+        <StatCard label="Net profit (this month)" value={`$${thisMonthProfit.toFixed(2)}`} highlight />
       </div>
 
       <h2 className="font-medium mb-2">Revenue by month</h2>
