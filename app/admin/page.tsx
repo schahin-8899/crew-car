@@ -9,7 +9,7 @@ export default async function AdminDashboardPage() {
   const { data: reservations } = await supabase
     .from('reservations')
     .select('car_id, start_date, end_date, total_price, payment_status')
-    .eq('status', 'confirmed');
+    .neq('status', 'cancelled');
   const { data: expenses } = await supabase.from('car_expenses').select('car_id, amount, expense_date');
 
   const carList = cars ?? [];
