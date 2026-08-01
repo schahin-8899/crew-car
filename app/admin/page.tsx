@@ -1,5 +1,11 @@
 import { createClient } from '@/lib/supabase/server';
-import { summarizeByCar, monthlyFinancials, carRunningTotals, countRentalDays } from '@/lib/stats';
+import {
+  summarizeByCar,
+  monthlyFinancials,
+  carRunningTotals,
+  countRentalDays,
+  monthlySnapshot,
+} from '@/lib/stats';
 import RunningTotalChart from '@/components/running-total-chart';
 
 export default async function AdminDashboardPage() {
@@ -32,21 +38,34 @@ export default async function AdminDashboardPage() {
   const runningTotals = carRunningTotals(carList, reservationList, expenseList);
   const maxRevenue = Math.max(1, ...monthly.map((m) => m.revenue));
   const maxProfitMagnitude = Math.max(1, ...monthly.map((m) => Math.abs(m.profit)));
-  // The monthly array runs oldest → newest and always ends on the
-  // current month, so the last entry is this month's figures.
-  const thisMonthProfit = monthly[monthly.length - 1]?.profit ?? 0;
+
+  const now = new Date();
+  const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  const currentMonthLabel = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  const thisMonth = monthlySnapshot(reservationList, expenseList, currentMonthKey);
 
   return (
     <div className="max-w-4xl">
       <h1 className="font-display text-2xl font-medium tracking-tight text-ink mb-4">Dashboard</h1>
 
+      <h2 className="font-medium mb-2">{currentMonthLabel}</h2>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
-        <StatCard label="Rented days (all time)" value={totalRentedDays.toString()} />
-        <StatCard label="Revenue collected" value={`$${totalPaid.toFixed(2)}`} />
-        <StatCard label="Outstanding" value={`$${totalOutstanding.toFixed(2)}`} />
+        <StatCard label="Rented days" value={thisMonth.rentedDays.toString()} />
+        <StatCard label="Billed" value={`$${thisMonth.billed.toFixed(2)}`} />
+        <StatCard label="Collected" value={`$${thisMonth.paid.toFixed(2)}`} />
+        <StatCard label="Outstanding" value={`$${thisMonth.outstanding.toFixed(2)}`} />
+        <StatCard label="Expenses" value={`$${thisMonth.expenses.toFixed(2)}`} />
+        <StatCard label="Net profit" value={`$${thisMonth.profit.toFixed(2)}`} highlight />
+      </div>
+
+      <h2 className="font-medium mb-2">All time</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+        <StatCard label="Rented days" value={totalRentedDays.toString()} />
         <StatCard label="Total billed" value={`$${totalBilled.toFixed(2)}`} />
+        <StatCard label="Total collected" value={`$${totalPaid.toFixed(2)}`} />
+        <StatCard label="Outstanding" value={`$${totalOutstanding.toFixed(2)}`} />
         <StatCard label="Total expenses" value={`$${totalExpenses.toFixed(2)}`} />
-        <StatCard label="Net profit (this month)" value={`$${thisMonthProfit.toFixed(2)}`} highlight />
+        <StatCard label="Net profit" value={`$${(totalPaid - totalExpenses).toFixed(2)}`} />
       </div>
 
       <h2 className="font-medium mb-2">Revenue by month</h2>

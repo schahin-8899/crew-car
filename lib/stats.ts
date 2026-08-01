@@ -169,6 +169,71 @@ export function carRunningTotals(
   });
 }
 
+// Same reasoning as splitReservationByMonth, but for night-counts instead
+// of dollar amounts — used to report "rented days" for a single month
+// without double-counting nights that fall in a different month.
+function splitReservationDaysByMonth(r: Reservation): { key: string; days: number }[] {
+  const start = new Date(r.start_date);
+  const end = new Date(r.end_date);
+
+  if (start.getTime() === end.getTime()) {
+    return [{ key: monthKey(start), days: 1 }];
+  }
+
+  const totals = new Map<string, number>();
+  for (let d = new Date(start); d < end; d.setDate(d.getDate() + 1)) {
+    const key = monthKey(d);
+    totals.set(key, (totals.get(key) ?? 0) + 1);
+  }
+  return Array.from(totals.entries()).map(([key, days]) => ({ key, days }));
+}
+
+export type MonthSnapshot = {
+  rentedDays: number;
+  billed: number;
+  paid: number;
+  outstanding: number;
+  expenses: number;
+  profit: number;
+};
+
+// Full picture for one specific month (e.g. "2026-08") — a reservation
+// spanning into or out of that month only contributes its overlapping
+// share, consistent with the monthly charts.
+export function monthlySnapshot(
+  reservations: Reservation[],
+  expenses: Expense[],
+  targetKey: string
+): MonthSnapshot {
+  let billed = 0;
+  let paid = 0;
+  let rentedDays = 0;
+
+  for (const r of reservations) {
+    for (const { key, amount } of splitReservationByMonth(r)) {
+      if (key !== targetKey) continue;
+      billed += amount;
+      if (r.payment_status === 'paid') paid += amount;
+    }
+    for (const { key, days } of splitReservationDaysByMonth(r)) {
+      if (key === targetKey) rentedDays += days;
+    }
+  }
+
+  const monthExpenses = expenses
+    .filter((e) => e.expense_date?.slice(0, 7) === targetKey)
+    .reduce((sum, e) => sum + Number(e.amount), 0);
+
+  return {
+    rentedDays,
+    billed,
+    paid,
+    outstanding: billed - paid,
+    expenses: monthExpenses,
+    profit: billed - monthExpenses,
+  };
+}
+
 export type MonthlyFinancials = { label: string; revenue: number; profit: number };
 
 export function monthlyFinancials(
