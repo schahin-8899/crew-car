@@ -65,7 +65,7 @@ export default async function AdminDashboardPage() {
         <StatCard label="Total collected" value={`$${totalPaid.toFixed(2)}`} />
         <StatCard label="Outstanding" value={`$${totalOutstanding.toFixed(2)}`} />
         <StatCard label="Total expenses" value={`$${totalExpenses.toFixed(2)}`} />
-        <StatCard label="Net profit" value={`$${(totalPaid - totalExpenses).toFixed(2)}`} />
+        <StatCard label="Net profit" value={`$${(totalBilled - totalExpenses).toFixed(2)}`} />
       </div>
 
       <h2 className="font-medium mb-2">Revenue by month</h2>
