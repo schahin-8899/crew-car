@@ -1,0 +1,55 @@
+{
+  "carsList": {
+    "title": "Available cars",
+    "subtitle": "Pick a car to see pricing and book your dates.",
+    "noPhoto": "No photo yet",
+    "perDay": "/day",
+    "noCars": "No cars available right now."
+  },
+  "book": {
+    "baseRate": "base rate",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "pickupDate": "Pickup date",
+    "dropoffDate": "Drop-off date",
+    "pickupTime": "Pickup time",
+    "dropoffTime": "Drop-off time",
+    "pickupLocation": "Pickup location",
+    "dropoffLocation": "Drop-off location",
+    "selectLocation": "Select…",
+    "paymentMethod": "Payment method",
+    "zelle": "Zelle",
+    "cash": "Cash",
+    "datesUnavailable": "Those dates aren't available for this car.",
+    "total": "Total",
+    "confirm": "Confirm reservation",
+    "confirming": "Confirming…",
+    "paymentInstructions": "Pay by Zelle (pavajuan79@gmail.com) or Colombia transfer (llave 1019127971), or cash before picking up car.",
+    "confirmed": "Reservation confirmed. Payment instructions are on your bill in \"My reservations\". Redirecting…"
+  },
+  "auth": {
+    "login": "Log in",
+    "signup": "Create an account",
+    "fullName": "Full name",
+    "email": "Email",
+    "password": "Password",
+    "noAccount": "No account?",
+    "haveAccount": "Already have an account?",
+    "loggingIn": "Logging in…",
+    "creatingAccount": "Creating account…",
+    "signUp": "Sign up"
+  },
+  "dashboard": {
+    "title": "My reservations",
+    "bookCar": "Book a car",
+    "noReservations": "No reservations yet.",
+    "browseCars": "Browse cars",
+    "viewBill": "View bill",
+    "pickupTBD": "Pickup TBD",
+    "dropoffTBD": "Drop-off TBD",
+    "pickupPhotos": "Pickup condition photos",
+    "dropoffPhotos": "Drop-off condition photos",
+    "addPhotos": "Add condition photos",
+    "hidePhotos": "Hide photos"
+  }
+}

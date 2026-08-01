@@ -1,0 +1,55 @@
+{
+  "carsList": {
+    "title": "Autos disponibles",
+    "subtitle": "Elige un auto para ver precios y reservar tus fechas.",
+    "noPhoto": "Sin foto aún",
+    "perDay": "/día",
+    "noCars": "No hay autos disponibles en este momento."
+  },
+  "book": {
+    "baseRate": "tarifa base",
+    "available": "Disponible",
+    "unavailable": "No disponible",
+    "pickupDate": "Fecha de recogida",
+    "dropoffDate": "Fecha de devolución",
+    "pickupTime": "Hora de recogida",
+    "dropoffTime": "Hora de devolución",
+    "pickupLocation": "Lugar de recogida",
+    "dropoffLocation": "Lugar de devolución",
+    "selectLocation": "Seleccionar…",
+    "paymentMethod": "Método de pago",
+    "zelle": "Zelle",
+    "cash": "Efectivo",
+    "datesUnavailable": "Esas fechas no están disponibles para este auto.",
+    "total": "Total",
+    "confirm": "Confirmar reserva",
+    "confirming": "Confirmando…",
+    "paymentInstructions": "Paga por Zelle (pavajuan79@gmail.com) o transferencia a Colombia (llave 1019127971), o en efectivo antes de recoger el auto.",
+    "confirmed": "Reserva confirmada. Las instrucciones de pago están en tu factura en \"Mis reservas\". Redirigiendo…"
+  },
+  "auth": {
+    "login": "Iniciar sesión",
+    "signup": "Crear una cuenta",
+    "fullName": "Nombre completo",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "noAccount": "¿No tienes cuenta?",
+    "haveAccount": "¿Ya tienes una cuenta?",
+    "loggingIn": "Iniciando sesión…",
+    "creatingAccount": "Creando cuenta…",
+    "signUp": "Regístrate"
+  },
+  "dashboard": {
+    "title": "Mis reservas",
+    "bookCar": "Reservar un auto",
+    "noReservations": "Aún no tienes reservas.",
+    "browseCars": "Ver autos",
+    "viewBill": "Ver factura",
+    "pickupTBD": "Recogida por confirmar",
+    "dropoffTBD": "Devolución por confirmar",
+    "pickupPhotos": "Fotos de recogida",
+    "dropoffPhotos": "Fotos de devolución",
+    "addPhotos": "Agregar fotos",
+    "hidePhotos": "Ocultar fotos"
+  }
+}
