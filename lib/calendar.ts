@@ -14,11 +14,11 @@ export type CalendarDay = {
 type ReservationRange = {
   start_date: string;
   end_date: string;
-  guest_name: string | null;
+  guest_name?: string | null;
   profiles?: { full_name: string | null } | null;
 };
 
-type BlackoutRange = { start_date: string; end_date: string; reason: string | null };
+type BlackoutRange = { start_date: string; end_date: string; reason?: string | null };
 
 function toDateOnly(d: Date) {
   return d.toISOString().slice(0, 10);

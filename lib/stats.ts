@@ -116,6 +116,8 @@ export function carRunningTotals(
   });
 }
 
+export type MonthlyFinancials = { label: string; revenue: number; profit: number };
+
 export function monthlyFinancials(
   reservations: Reservation[],
   expenses: Expense[],
