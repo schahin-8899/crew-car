@@ -48,11 +48,36 @@ export default function LocationPhoto({
     router.refresh();
   }
 
+  async function handleRemove() {
+    setUploading(true);
+    setError(null);
+    const { error: updateError } = await supabase
+      .from('locations')
+      .update({ photo_url: null })
+      .eq('id', locationId);
+
+    setUploading(false);
+    if (updateError) {
+      setError(updateError.message);
+      return;
+    }
+    router.refresh();
+  }
+
   return (
     <div>
       {photoUrl && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={photoUrl} alt="" className="w-full max-w-xs aspect-video object-cover rounded mb-2" />
+        <div className="mb-2">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={photoUrl} alt="" className="w-full max-w-xs aspect-video object-cover rounded mb-1" />
+          <button
+            onClick={handleRemove}
+            disabled={uploading}
+            className="text-xs text-neutral-400 hover:text-red-600 disabled:opacity-50"
+          >
+            Remove photo
+          </button>
+        </div>
       )}
       <input type="file" accept="image/*" onChange={handleFile} disabled={uploading} className="text-sm" />
       {uploading && <p className="text-sm text-neutral-500 mt-1">Uploading…</p>}
