@@ -234,6 +234,32 @@ export function monthlySnapshot(
   };
 }
 
+// Finds how many months back the charts need to go to reach the
+// earliest reservation or expense on record, so a business that just
+// started doesn't show 10+ empty months before anything happened.
+// Capped at 12 so a very old stray record doesn't stretch the chart out
+// indefinitely.
+export function monthsBackToEarliestActivity(
+  reservations: { start_date: string }[],
+  expenses: { expense_date?: string }[],
+  cap = 12
+): number {
+  const dates = [
+    ...reservations.map((r) => r.start_date),
+    ...expenses.map((e) => e.expense_date).filter((d): d is string => !!d),
+  ];
+  if (dates.length === 0) return 1;
+
+  const earliest = dates.reduce((min, d) => (d < min ? d : min), dates[0]);
+  const earliestDate = new Date(earliest);
+  const now = new Date();
+
+  const monthsDiff =
+    (now.getFullYear() - earliestDate.getFullYear()) * 12 + (now.getMonth() - earliestDate.getMonth()) + 1;
+
+  return Math.min(cap, Math.max(1, monthsDiff));
+}
+
 export type MonthlyFinancials = { label: string; revenue: number; profit: number };
 
 export function monthlyFinancials(

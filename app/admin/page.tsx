@@ -5,6 +5,7 @@ import {
   carRunningTotals,
   countRentalDays,
   monthlySnapshot,
+  monthsBackToEarliestActivity,
 } from '@/lib/stats';
 import RunningTotalChart from '@/components/running-total-chart';
 
@@ -34,8 +35,9 @@ export default async function AdminDashboardPage() {
   const totalExpenses = expenseList.reduce((sum, e) => sum + Number(e.amount), 0);
 
   const carSummaries = summarizeByCar(carList, reservationList, expenseList);
-  const monthly = monthlyFinancials(reservationList, expenseList);
-  const runningTotals = carRunningTotals(carList, reservationList, expenseList);
+  const monthsBack = monthsBackToEarliestActivity(reservationList, expenseList);
+  const monthly = monthlyFinancials(reservationList, expenseList, monthsBack);
+  const runningTotals = carRunningTotals(carList, reservationList, expenseList, monthsBack);
   const maxRevenue = Math.max(1, ...monthly.map((m) => m.revenue));
   const maxProfitMagnitude = Math.max(1, ...monthly.map((m) => Math.abs(m.profit)));
 
